@@ -6,11 +6,12 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { getOverrideProps } from "./utils";
+import { getOverrideProps, useNavigateAction } from "./utils";
 import { Button, Flex, Image, Text, View } from "@aws-amplify/ui-react";
 import MyIcon from "./MyIcon";
 export default function ReviewCard(props) {
-  const { overrides, ...rest } = props;
+  const { diary, overrides, ...rest } = props;
+  const buttonOnClick = useNavigateAction({ type: "url", url: "/edit" });
   return (
     <Flex
       gap="0"
@@ -78,6 +79,9 @@ export default function ReviewCard(props) {
           size="default"
           isDisabled={false}
           variation="default"
+          onClick={() => {
+            buttonOnClick();
+          }}
           {...getOverrideProps(overrides, "Button")}
         ></Button>
       </View>
@@ -126,7 +130,7 @@ export default function ReviewCard(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="Name of Restaurant"
+            children={diary?.name}
             {...getOverrideProps(overrides, "Name of Restaurant")}
           ></Text>
           <Text
@@ -149,7 +153,7 @@ export default function ReviewCard(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="Writer/Author"
+            children={diary?.author}
             {...getOverrideProps(overrides, "Writer/Author")}
           ></Text>
           <Text
@@ -171,7 +175,7 @@ export default function ReviewCard(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="Description of Review"
+            children={diary?.description}
             {...getOverrideProps(overrides, "Description of Review")}
           ></Text>
         </Flex>

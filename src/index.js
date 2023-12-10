@@ -6,12 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
 import config from './aws-exports';
 import { BrowserRouter } from "react-router-dom";
-// import awsconfig from './aws-exports';
+import awsconfig from './aws-exports';
 
 import "@aws-amplify/ui-react/styles.css";
 
 // Amplify.configure(awsconfig);
-Amplify.configure(config);
+Amplify.configure(awsconfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

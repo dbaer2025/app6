@@ -35,6 +35,8 @@ export declare type UIEditReviewOverridesProps = {
     Button4104138?: PrimitiveOverrideProps<ButtonProps>;
 } & EscapeHatchProps;
 export declare type UIEditReviewProps = React.PropsWithChildren<Partial<FlexProps> & {
+    diary?: any;
+} & {
     overrides?: UIEditReviewOverridesProps | undefined | null;
 }>;
 export default function UIEditReview(props: UIEditReviewProps): React.ReactElement;

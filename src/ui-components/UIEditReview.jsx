@@ -6,7 +6,11 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { getOverrideProps } from "./utils";
+import { useAuth } from "@aws-amplify/ui-react/internal";
+import { useState } from "react";
+import { getOverrideProps, useNavigateAction } from "./utils";
+import { API } from "aws-amplify";
+import { deleteDiary, updateDiary } from "../graphql/mutations";
 import {
   Button,
   Divider,
@@ -17,7 +21,53 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 export default function UIEditReview(props) {
-  const { overrides, ...rest } = props;
+  const { diary, overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const [
+    textFieldFourZeroSevenFiveFourFiveZeroValue,
+    setTextFieldFourZeroSevenFiveFourFiveZeroValue,
+  ] = useState("");
+  const [
+    textFieldFourZeroSevenFiveFourSevenOneValue,
+    setTextFieldFourZeroSevenFiveFourSevenOneValue,
+  ] = useState("");
+  const [
+    textFieldFourZeroSevenFiveFourSevenEightValue,
+    setTextFieldFourZeroSevenFiveFourSevenEightValue,
+  ] = useState("");
+  const vectorOnClick = useNavigateAction({ type: "url", url: "/" });
+  const buttonFourZeroSevenFiveFiveSevenFourOnClick = async () => {
+    await API.graphql({
+      query: updateDiary.replaceAll("__typename", ""),
+      variables: {
+        input: {
+          name: textFieldFourZeroSevenFiveFourFiveZeroValue,
+          image: textFieldFourZeroSevenFiveFourSevenOneValue,
+          description: textFieldFourZeroSevenFiveFourSevenEightValue,
+          author: authAttributes["email"],
+          id: diary?.id,
+        },
+      },
+    });
+  };
+  const buttonFourZeroSevenFiveFiveSevenFourOnMouseOut = useNavigateAction({
+    type: "url",
+    url: "/",
+  });
+  const buttonFourOneZeroFourOneThreeEightOnClick = async () => {
+    await API.graphql({
+      query: deleteDiary.replaceAll("__typename", ""),
+      variables: {
+        input: {
+          id: diary?.id,
+        },
+      },
+    });
+  };
+  const buttonFourOneZeroFourOneThreeEightOnMouseOut = useNavigateAction({
+    type: "url",
+    url: "/",
+  });
   return (
     <Flex
       gap="16px"
@@ -91,6 +141,9 @@ export default function UIEditReview(props) {
               bottom="20.83%"
               left="20.83%"
               right="20.83%"
+              onClick={() => {
+                vectorOnClick();
+              }}
               {...getOverrideProps(overrides, "Vector")}
             ></Icon>
           </View>
@@ -148,6 +201,12 @@ export default function UIEditReview(props) {
             isDisabled={false}
             labelHidden={false}
             variation="default"
+            value={textFieldFourZeroSevenFiveFourFiveZeroValue}
+            onChange={(event) => {
+              setTextFieldFourZeroSevenFiveFourFiveZeroValue(
+                event.target.value
+              );
+            }}
             {...getOverrideProps(overrides, "TextField4075450")}
           ></TextField>
           <TextField
@@ -160,6 +219,12 @@ export default function UIEditReview(props) {
             isDisabled={false}
             labelHidden={false}
             variation="default"
+            value={textFieldFourZeroSevenFiveFourSevenOneValue}
+            onChange={(event) => {
+              setTextFieldFourZeroSevenFiveFourSevenOneValue(
+                event.target.value
+              );
+            }}
             {...getOverrideProps(overrides, "TextField4075471")}
           ></TextField>
           <TextField
@@ -172,6 +237,12 @@ export default function UIEditReview(props) {
             isDisabled={false}
             labelHidden={false}
             variation="default"
+            value={textFieldFourZeroSevenFiveFourSevenEightValue}
+            onChange={(event) => {
+              setTextFieldFourZeroSevenFiveFourSevenEightValue(
+                event.target.value
+              );
+            }}
             {...getOverrideProps(overrides, "TextField4075478")}
           ></TextField>
         </Flex>
@@ -207,6 +278,12 @@ export default function UIEditReview(props) {
             isDisabled={false}
             variation="default"
             children="Save"
+            onClick={() => {
+              buttonFourZeroSevenFiveFiveSevenFourOnClick();
+            }}
+            onMouseOut={() => {
+              buttonFourZeroSevenFiveFiveSevenFourOnMouseOut();
+            }}
             {...getOverrideProps(overrides, "Button4075574")}
           ></Button>
           <Button
@@ -219,6 +296,12 @@ export default function UIEditReview(props) {
             isDisabled={false}
             variation="default"
             children="Delete"
+            onClick={() => {
+              buttonFourOneZeroFourOneThreeEightOnClick();
+            }}
+            onMouseOut={() => {
+              buttonFourOneZeroFourOneThreeEightOnMouseOut();
+            }}
             {...getOverrideProps(overrides, "Button4104138")}
           ></Button>
         </Flex>

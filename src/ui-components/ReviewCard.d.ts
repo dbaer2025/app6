@@ -31,6 +31,8 @@ export declare type ReviewCardOverridesProps = {
     "Description of Review"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type ReviewCardProps = React.PropsWithChildren<Partial<FlexProps> & {
+    diary?: any;
+} & {
     overrides?: ReviewCardOverridesProps | undefined | null;
 }>;
 export default function ReviewCard(props: ReviewCardProps): React.ReactElement;

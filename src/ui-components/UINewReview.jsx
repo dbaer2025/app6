@@ -6,7 +6,12 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { getOverrideProps } from "./utils";
+import { useAuth } from "@aws-amplify/ui-react/internal";
+import { useState } from "react";
+import { API } from "aws-amplify";
+import { Field } from "@aws-amplify/ui-react/internal";
+import { createDiary } from "../graphql/mutations";
+import { getOverrideProps, useNavigateAction } from "./utils";
 import {
   Button,
   Divider,
@@ -17,7 +22,34 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 export default function UINewReview(props) {
-  const { overrides, ...rest } = props;
+  const { d, overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const [
+    textFieldFourZeroSevenFiveFourOneFiveValue,
+    setTextFieldFourZeroSevenFiveFourOneFiveValue,
+  ] = useState("");
+  const [
+    textFieldFourZeroSevenFiveFourThreeSixValue,
+    setTextFieldFourZeroSevenFiveFourThreeSixValue,
+  ] = useState("");
+  const [
+    textFieldFourZeroSevenFiveFourFourThreeValue,
+    setTextFieldFourZeroSevenFiveFourFourThreeValue,
+  ] = useState("");
+  const buttonOnClick = async () => {
+    await API.graphql({
+      query: createDiary.replaceAll("__typename", ""),
+      variables: {
+        input: {
+          name: textFieldFourZeroSevenFiveFourOneFiveValue,
+          image: textFieldFourZeroSevenFiveFourThreeSixValue,
+          description: textFieldFourZeroSevenFiveFourFourThreeValue,
+          author: authAttributes["email"],
+        },
+      },
+    });
+  };
+  const buttonOnMouseOut = useNavigateAction({ type: "url", url: "/" });
   return (
     <Flex
       gap="16px"
@@ -148,20 +180,34 @@ export default function UINewReview(props) {
             isDisabled={false}
             labelHidden={false}
             variation="default"
+            value={textFieldFourZeroSevenFiveFourOneFiveValue}
+            onChange={(event) => {
+              setTextFieldFourZeroSevenFiveFourOneFiveValue(event.target.value);
+            }}
             {...getOverrideProps(overrides, "TextField4075415")}
           ></TextField>
-          <TextField
-            width="272px"
-            height="unset"
-            label="Image Link"
-            placeholder="http://www.example.com"
-            shrink="0"
-            size="default"
-            isDisabled={false}
-            labelHidden={false}
-            variation="default"
-            {...getOverrideProps(overrides, "TextField4075436")}
-          ></TextField>
+          <Field
+
+label={"Image"}
+isRequired={false}
+isReadOnly={false}
+>
+<StorageManager
+  onUploadSuccess={({ key }) => {
+    setImageName(
+      key
+    );
+  }}
+  processFile={processFile}
+  accessLevel={"public"}
+  acceptedFileTypes={[]}
+  isResumable={false}
+  showThumbnails={true}
+  maxFileCount={1}
+  {...getOverrideProps(overrides, "image")}
+></StorageManager>
+</Field>
+
           <TextField
             width="272px"
             height="unset"
@@ -172,6 +218,12 @@ export default function UINewReview(props) {
             isDisabled={false}
             labelHidden={false}
             variation="default"
+            value={textFieldFourZeroSevenFiveFourFourThreeValue}
+            onChange={(event) => {
+              setTextFieldFourZeroSevenFiveFourFourThreeValue(
+                event.target.value
+              );
+            }}
             {...getOverrideProps(overrides, "TextField4075443")}
           ></TextField>
         </Flex>
@@ -206,6 +258,12 @@ export default function UINewReview(props) {
             isDisabled={false}
             variation="default"
             children="Create"
+            onClick={() => {
+              buttonOnClick();
+            }}
+            onMouseOut={() => {
+              buttonOnMouseOut();
+            }}
             {...getOverrideProps(overrides, "Button")}
           ></Button>
         </Flex>

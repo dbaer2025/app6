@@ -34,6 +34,8 @@ export declare type UINewReviewOverridesProps = {
     Button?: PrimitiveOverrideProps<ButtonProps>;
 } & EscapeHatchProps;
 export declare type UINewReviewProps = React.PropsWithChildren<Partial<FlexProps> & {
+    d?: any;
+} & {
     overrides?: UINewReviewOverridesProps | undefined | null;
 }>;
 export default function UINewReview(props: UINewReviewProps): React.ReactElement;

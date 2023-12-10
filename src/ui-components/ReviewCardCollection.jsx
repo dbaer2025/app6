@@ -1,18 +1,13 @@
-/***************************************************************************
- * The contents of this file were generated with Amplify Studio.           *
- * Please refrain from making any modifications to this file.              *
- * Any changes to this file will be overwritten when running amplify pull. *
- **************************************************************************/
-
-/* eslint-disable */
 import * as React from "react";
 import { listDiaries } from "../graphql/queries";
 import ReviewCard from "./ReviewCard";
 import { getOverrideProps } from "./utils";
 import { Collection, Pagination, Placeholder } from "@aws-amplify/ui-react";
-import { API } from "aws-amplify";
+import { Auth } from "@aws-amplify/auth";
+import { API, Storage } from "aws-amplify";
 const nextToken = {};
 const apiCache = {};
+
 export default function ReviewCardCollection(props) {
   const { items: itemsProp, overrideItems, overrides, ...rest } = props;
   const [pageIndex, setPageIndex] = React.useState(1);
@@ -60,7 +55,22 @@ export default function ReviewCardCollection(props) {
       ).data.listDiaries;
       newCache.push(...result.items);
       newNext = result.nextToken;
+      const diariesFromAPI = result.items
+      const user = await Auth.currentAuthenticatedUser();
+       await Promise.all(
+              diariesFromAPI.map(async (diary) => {
+                if (diary.image) {
+                  const url = await Storage.get(diary.image);
+                 
+                  console.log(user.attributes.email + "  " + diary.author);
+                  diary.image = url;
+          
+                }
+                return diary;
+              })
+            );
     }
+    
     const cacheSlice = isPaginated
       ? newCache.slice((page - 1) * pageSize, page * pageSize)
       : newCache;
@@ -94,6 +104,7 @@ export default function ReviewCardCollection(props) {
           }
           return (
             <ReviewCard
+              diary={item}
               key={item.id}
               {...(overrideItems && overrideItems({ item, index }))}
             ></ReviewCard>

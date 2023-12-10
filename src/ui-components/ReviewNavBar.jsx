@@ -6,10 +6,12 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { getOverrideProps } from "./utils";
+import { getOverrideProps, useNavigateAction } from "./utils";
 import { Button, Flex, Text } from "@aws-amplify/ui-react";
 export default function ReviewNavBar(props) {
   const { overrides, ...rest } = props;
+  const foodDiaryOnClick = useNavigateAction({ type: "url", url: "/" });
+  const buttonOnClick = useNavigateAction({ type: "url", url: "/new" });
   return (
     <Flex
       gap="20px"
@@ -57,6 +59,9 @@ export default function ReviewNavBar(props) {
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
           children="Food Diary"
+          onClick={() => {
+            foodDiaryOnClick();
+          }}
           {...getOverrideProps(overrides, "Food Diary")}
         ></Text>
       </Flex>
@@ -106,6 +111,9 @@ export default function ReviewNavBar(props) {
         isDisabled={false}
         variation="default"
         children="+"
+        onClick={() => {
+          buttonOnClick();
+        }}
         {...getOverrideProps(overrides, "Button")}
       ></Button>
     </Flex>
