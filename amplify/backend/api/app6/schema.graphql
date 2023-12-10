@@ -1,0 +1,14 @@
+type Note @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  fid: String
+  src: String
+}
+
+type Diary @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  image: String
+  description: String
+  author: String
+}
